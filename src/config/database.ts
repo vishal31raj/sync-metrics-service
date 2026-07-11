@@ -10,7 +10,10 @@ const useSSL = process.env.DB_SSL === "true";
 export const sequelize = new Sequelize(process.env.DATABASE_URL as string, {
   dialect: "postgres",
   logging: false,
-  dialectOptions: useSSL
-    ? { ssl: { require: true, rejectUnauthorized: false } }
-    : {},
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
 });
