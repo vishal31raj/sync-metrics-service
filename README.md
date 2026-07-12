@@ -17,9 +17,9 @@ Stack: Node.js, Express, TypeScript, Sequelize, Postgres (Supabase).
 ```bash
 npm install
 cp .env.example .env   # fill in DATABASE_URL, HUBSPOT_API_KEY, STRIPE_SECRET_KEY, GOOGLE_SERVICE_ACCOUNT_JSON
-npm run migrate         # applies migrations/001_init.sql to your Supabase DB
-npm run seed             # optional: loads sample data without needing live creds
-npm run dev               # starts the API on :3000
+npm run migrate        # applies migrations/001_init.sql to your Supabase DB
+npm run seed           # optional: loads sample data without needing live creds
+npm run dev            # starts the API on :3000
 ```
 
 **External accounts needed** (all free/test-mode):
@@ -39,17 +39,17 @@ npm run dev               # starts the API on :3000
 ## Running the pipeline
 
 ```bash
-npm run sync              # one-off: pulls all three sources, prints per-source summary
-curl -X POST localhost:3000/sync/run    # same thing, over HTTP
-curl localhost:3000/sync/runs           # audit log of past runs, per source
+npm run sync                            # one-off: pulls all three sources, prints per-source summary
+curl -X POST https://sync-metrics-service.onrender.com/sync/run    # same thing, over HTTP
+curl https://sync-metrics-service.onrender.com/sync/runs           # audit log of past runs, per source
 ```
 
 ## Querying revenue
 
 ```bash
-curl "localhost:3000/metrics/revenue/summary?startDate=2026-01-01&endDate=2026-02-01"
-curl "localhost:3000/metrics/revenue/breakdown?startDate=2026-01-01&endDate=2026-02-01&granularity=day"
-curl "localhost:3000/metrics/revenue/consistency-check?startDate=2026-01-01&endDate=2026-02-01"
+curl "https://sync-metrics-service.onrender.com/metrics/revenue/summary?startDate=2026-01-01&endDate=2026-02-01"
+curl "https://sync-metrics-service.onrender.com/metrics/revenue/breakdown?startDate=2026-01-01&endDate=2026-02-01&granularity=day"
+curl "https://sync-metrics-service.onrender.com/metrics/revenue/consistency-check?startDate=2026-01-01&endDate=2026-02-01"
 ```
 
 ## Tests
@@ -150,3 +150,18 @@ Three independent guardrails:
   different status list because there is only one Postgres view; a second
   implementation would have to explicitly bypass it, which is what the
   test above is designed to notice.
+
+---
+
+## Endpoints that can be tested
+
+| Method | Path                                                              | Purpose                                              |
+|--------|-------------------------------------------------------------------|-------------------------------------------------------|
+| GET    | `/health`                                                         | liveness check                                        |
+| POST   | `/sync/run`                                                       | trigger a full sync across all 3 sources               |
+| GET    | `/sync/runs`                                                      | audit log — success/partial/failed per source, per run |
+| POST   | `/webhooks/stripe`                                                | simulate a Stripe webhook delivery                     |
+| POST   | `/webhooks/hubspot`                                               | simulate a HubSpot webhook delivery                     |
+| GET    | `/metrics/revenue/summary?startDate=...&endDate=...`              | single total                                           |
+| GET    | `/metrics/revenue/breakdown?startDate=...&endDate=...&granularity=day\|week` | per-period totals                            |
+| GET    | `/metrics/revenue/consistency-check?startDate=...&endDate=...`    | proves summary and breakdown agree                     |
