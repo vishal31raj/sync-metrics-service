@@ -165,3 +165,82 @@ Three independent guardrails:
 | GET    | `/metrics/revenue/summary?startDate=...&endDate=...`              | single total                                           |
 | GET    | `/metrics/revenue/breakdown?startDate=...&endDate=...&granularity=day\|week` | per-period totals                            |
 | GET    | `/metrics/revenue/consistency-check?startDate=...&endDate=...`    | proves summary and breakdown agree                     |
+
+---
+
+# Research & Resources Used
+
+During the implementation, I referred to the following resources for documentation, API behavior, and best practices:
+
+## Official Documentation
+
+- **Node.js**
+  - https://nodejs.org/docs/latest/api/
+
+- **TypeScript**
+  - https://www.typescriptlang.org/docs/
+
+- **Express.js**
+  - https://expressjs.com/
+
+- **Sequelize**
+  - https://sequelize.org/docs/v6/
+
+- **PostgreSQL**
+  - https://www.postgresql.org/docs/
+
+- **Google Calendar API**
+  - https://developers.google.com/calendar/api
+  - https://developers.google.com/calendar/api/v3/reference/events/list
+  - https://developers.google.com/identity/protocols/oauth2/service-account
+
+- **Google Auth Library**
+  - https://github.com/googleapis/google-auth-library-nodejs
+
+- **Stripe API**
+  - https://docs.stripe.com/api
+  - https://docs.stripe.com/testing
+
+- **HubSpot CRM API**
+  - https://developers.hubspot.com/docs/api/crm
+
+- **Zod**
+  - https://zod.dev/
+
+- **Render**
+  - https://render.com/docs
+
+- **Supabase**
+  - https://supabase.com/docs/guides/database
+
+## Libraries Used
+
+- express
+- sequelize
+- pg
+- google-auth-library
+- node-fetch
+- zod
+- dotenv
+- uuid
+- jest
+- ts-jest
+- ts-node
+- typescript
+
+## Free-tier Services
+
+- **Supabase** — PostgreSQL database
+- **Render** — Application hosting
+- **Google Cloud** — Service Account & Google Calendar API
+- **Stripe** — Test API keys and sandbox environment
+- **HubSpot** — Developer account and CRM API
+
+## Research Sources
+
+When troubleshooting implementation issues, I also referenced:
+
+- Stack Overflow
+- GitHub Issues (for Sequelize, Google Auth Library, and Render-related issues)
+- Render Community discussions
+- Google Cloud documentation and API error references

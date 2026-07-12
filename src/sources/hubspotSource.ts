@@ -126,7 +126,7 @@ export const hubspotSource: SourceAdapter<HubSpotContact> = {
         `/crm/v3/objects/contacts?${qs.toString()}`,
       )) as HubSpotSearchResponse;
     } catch (err) {
-      if (err instanceof StaleCursorError) throw err; // shouldn't happen on full fetch, but stay consistent
+      if (err instanceof StaleCursorError) throw err;
       throw new SourceUnavailableError("hubspot", err);
     }
 

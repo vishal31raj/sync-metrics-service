@@ -118,6 +118,6 @@ describe("sync orchestrator", () => {
     await runSourceSync(source);
 
     const rows = await Transaction.findAll({ where: { source: "fake_c" } });
-    expect(rows).toHaveLength(1); // upsert on (source, source_id) collapsed both runs
+    expect(rows).toHaveLength(1); 
   });
 });
