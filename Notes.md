@@ -1,6 +1,4 @@
-Q- Can you please check this error? const { fileExists = ts.sys.fileExists, readFile = ts.sys.readFile, skipProject = index_1.DEFAULTS.skipProject, project = index_1.DEFAULTS.project, tsTrace = index_1.DEFAULTS.tsTrace, } = rawApiOptions;
-
---
+### Can you please check this error? const { fileExists = ts.sys.fileExists, readFile = ts.sys.readFile, skipProject = index_1.DEFAULTS.skipProject, project = index_1.DEFAULTS.project, tsTrace = index_1.DEFAULTS.tsTrace, } = rawApiOptions;
 
 This error is **not related to your code**. It's almost always caused by an incompatible or broken **TypeScript/ts-node installation**.
 
