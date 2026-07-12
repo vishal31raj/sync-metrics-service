@@ -41,16 +41,26 @@ export interface NormalizedRecord {
  * treating it like a generic failure.
  */
 export class StaleCursorError extends Error {
-  constructor(public readonly source: string, public readonly cause?: unknown) {
-    super(`Cursor rejected by source "${source}" (stale/expired) -- falling back to full backfill`);
+  constructor(
+    public readonly source: string,
+    public readonly cause?: unknown,
+  ) {
+    super(
+      `Cursor rejected by source "${source}" (stale/expired) -- falling back to full backfill`,
+    );
     this.name = "StaleCursorError";
   }
 }
 
 /** Thrown for any other source-side failure (network, auth, 5xx, garbage payload). */
 export class SourceUnavailableError extends Error {
-  constructor(public readonly source: string, public readonly cause?: unknown) {
-    super(`Source "${source}" is unavailable or returned an unexpected response`);
+  constructor(
+    public readonly source: string,
+    public readonly cause?: unknown,
+  ) {
+    super(
+      `Source "${source}" is unavailable or returned an unexpected response`,
+    );
     this.name = "SourceUnavailableError";
   }
 }

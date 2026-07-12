@@ -40,7 +40,10 @@ const SOURCE_STATUS_MAPS: Record<string, Record<string, CanonicalTxnStatus>> = {
   },
 };
 
-export function mapStatus(source: string, rawStatus: string): CanonicalTxnStatus {
+export function mapStatus(
+  source: string,
+  rawStatus: string,
+): CanonicalTxnStatus {
   const table = SOURCE_STATUS_MAPS[source];
   const normalizedKey = rawStatus.trim().toLowerCase();
   const mapped = table?.[normalizedKey];
@@ -59,7 +62,9 @@ export function mapStatus(source: string, rawStatus: string): CanonicalTxnStatus
  * anywhere else does NOT automatically start counting as revenue; someone
  * has to deliberately add it here.
  */
-export const COLLECTED_STATUSES: readonly CanonicalTxnStatus[] = ["collected"] as const;
+export const COLLECTED_STATUSES: readonly CanonicalTxnStatus[] = [
+  "collected",
+] as const;
 
 function logUnknownStatus(source: string, rawStatus: string): void {
   // In production this should page/alert, not just log -- an unknown status
@@ -69,6 +74,6 @@ function logUnknownStatus(source: string, rawStatus: string): void {
   console.warn(
     `[statusMap] Unrecognized status "${rawStatus}" from source "${source}". ` +
       `Mapped to 'unknown' and EXCLUDED from revenue by default (allow-list, not exclude-list). ` +
-      `Add an explicit mapping in src/normalize/statusMap.ts once you've confirmed how it should count.`
+      `Add an explicit mapping in src/normalize/statusMap.ts once you've confirmed how it should count.`,
   );
 }
