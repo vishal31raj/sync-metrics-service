@@ -1,4 +1,4 @@
-### Can you please check this error? const { fileExists = ts.sys.fileExists, readFile = ts.sys.readFile, skipProject = index_1.DEFAULTS.skipProject, project = index_1.DEFAULTS.project, tsTrace = index_1.DEFAULTS.tsTrace, } = rawApiOptions;
+### Q-  Can you please check this error? const { fileExists = ts.sys.fileExists, readFile = ts.sys.readFile, skipProject = index_1.DEFAULTS.skipProject, project = index_1.DEFAULTS.project, tsTrace = index_1.DEFAULTS.tsTrace, } = rawApiOptions;
 
 This error is **not related to your code**. It's almost always caused by an incompatible or broken **TypeScript/ts-node installation**.
 
@@ -160,8 +160,7 @@ With those, I can pinpoint the exact issue in a minute.
 
 ---
 
-Q- I'm getting this error while trying to test hubspot connection. Please check.
-ApiException [Error]: HTTP-Code: 403 Message: An error occurred. Body: {"status":"error","message":"This app hasn't been granted all required scopes to make this call. Read more about required scopes here: https://developers.hubspot.com/scopes."}
+### Q-  I'm getting this error while trying to test hubspot connection. Please check. ApiException [Error]: HTTP-Code: 403 Message: An error occurred. Body: {"status":"error","message":"This app hasn't been granted all required scopes to make this call. Read more about required scopes here: https://developers.hubspot.com/scopes."}
 
 This error is actually very helpful—it tells us your **authentication is working**, but your app **doesn't have permission** to read contacts.
 
@@ -309,9 +308,7 @@ I suspect this is just a scope configuration issue, and we'll have it resolved i
 
 ---
 
-Q- Guide me through the steps create a Cloud project and enable the Calendar API.
-
-Perfect. Let's set up **Google Calendar** for the assignment properly. We'll use a **Service Account**, because it's the easiest and most reliable option for a backend service.
+### Q-  Guide me through the steps create a Cloud project and enable the Calendar API. Perfect. Let's set up **Google Calendar** for the assignment properly. We'll use a **Service Account**, because it's the easiest and most reliable option for a backend service.
 
 ---
 
@@ -680,8 +677,7 @@ Once that's working, we'll implement `GoogleCalendarProvider` with both full and
 
 ---
 
-Q- I'm getting this TS error which I think is related to PGSQL. Can you please check and guide me through the fix?
-return new TSError(diagnosticText, diagnosticCodes, diagnostics); ^ TSError: ⨯ Unable to compile TypeScript: src/config/database.ts:2:34 - error TS7016: Could not find a declaration file for module 'pg'. 'C:/Users/visha/Downloads/sync-metrics-service/sync-metrics-service/node_modules/pg/lib/index.js' implicitly has an 'any' type. Try npm i --save-dev @types/pg if it exists or add a new declaration (.d.ts) file containing declare module 'pg'; 2 import { types as pgTypes } from "pg";
+### Q-  I'm getting this TS error which I think is related to PGSQL. Can you please check and guide me through the fix?return new TSError(diagnosticText, diagnosticCodes, diagnostics); ^ TSError: ⨯ Unable to compile TypeScript: src/config/database.ts:2:34 - error TS7016: Could not find a declaration file for module 'pg'. 'C:/Users/visha/Downloads/sync-metrics-service/sync-metrics-service/node_modules/pg/lib/index.js' implicitly has an 'any' type. Try npm i --save-dev @types/pg if it exists or add a new declaration (.d.ts) file containing declare module 'pg'; 2 import { types as pgTypes } from "pg";
 
 This one is straightforward.
 
@@ -755,7 +751,7 @@ type tsconfig.json
 
 There may be another TypeScript configuration issue, but the missing `@types/pg` package is the first thing to fix.
 
-Q- After creating the build, render is not able to run the application. I think the issue is the file path mismatch. Can you please check the issue?
+### Q-  After creating the build, render is not able to run the application. I think the issue is the file path mismatch. Can you please check the issue?
 
 That output tells us your build is succeeding, but it also reveals the real issue.
 
@@ -846,8 +842,7 @@ Then in Render, you can simply use:
 
 This keeps your deployment configuration aligned with your project and makes it easier to change the entry point later if needed.
 
-Q- I'm facing issue connecting to supabase from render. I'm posting the exact error logs here. Help me fix this.
-GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:134:8) { 2026-07-11T23:18:41.153362955Z errno: -101, 2026-07-11T23:18:41.153366505Z code: 'ENETUNREACH', 2026-07-11T23:18:41.153369305Z syscall: 'connect', 2026-07-11T23:18:41.153372105Z address: '2406:da1a:b00:1300:6a7e:8c92:768c:e6cf', 2026-07-11T23:18:41.153375175Z port: 5432 2026-07-11T23:18:41.153377925Z }, 2026-07-11T23:18:41.153380966Z original: Error: connect ENETUNREACH 2406:da1a:b00:1300:6a7e:8c92:768c:e6cf:5432 - Local (:::0)
+### Q-  I'm facing issue connecting to supabase from render. I'm posting the exact error logs here. Help me fix this.GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:134:8) { 2026-07-11T23:18:41.153362955Z errno: -101, 2026-07-11T23:18:41.153366505Z code: 'ENETUNREACH', 2026-07-11T23:18:41.153369305Z syscall: 'connect', 2026-07-11T23:18:41.153372105Z address: '2406:da1a:b00:1300:6a7e:8c92:768c:e6cf', 2026-07-11T23:18:41.153375175Z port: 5432 2026-07-11T23:18:41.153377925Z }, 2026-07-11T23:18:41.153380966Z original: Error: connect ENETUNREACH 2406:da1a:b00:1300:6a7e:8c92:768c:e6cf:5432 - Local (:::0)
 
 This error is much more specific than the previous one.
 
@@ -923,8 +918,7 @@ or paste a screenshot (with the password hidden). That will let me tell you exac
 
 ---
 
-Q- I think now I have a different error. Please check the logs here:
-2026-07-11T23:22:31.236159946Z at TLSWrap.onStreamRead (node:internal/stream_base_commons:189:23) { 2026-07-11T23:22:31.236162846Z length: 71, 2026-07-11T23:22:31.236165676Z severity: 'FATAL', 2026-07-11T23:22:31.236168517Z code: '28P01', 2026-07-11T23:22:31.236171206Z detail: undefined, 2026-07-11T23:22:31.236173797Z hint: undefined, 2026-07-11T23:22:31.236176447Z position: undefined, 2026-07-11T23:22:31.236179047Z internalPosition: undefined, 2026-07-11T23:22:31.236181687Z internalQuery: undefined, 2026-07-11T23:22:31.236184217Z where: undefined, 2026-07-11T23:22:31.236186717Z schema: undefined, 2026-07-11T23:22:31.236189307Z table: undefined, 2026-07-11T23:22:31.236191807Z column: undefined, 2026-07-11T23:22:31.236194367Z dataType: undefined, 2026-07-11T23:22:31.236196997Z constraint: undefined, 2026-07-11T23:22:31.236199567Z file: undefined, 2026-07-11T23:22:31.236202087Z line: undefined, 2026-07-11T23:22:31.236204717Z routine: undefined 2026-07-11T23:22:31.236207587Z }
+### Q-  I think now I have a different error. Please check the logs here:2026-07-11T23:22:31.236159946Z at TLSWrap.onStreamRead (node:internal/stream_base_commons:189:23) { 2026-07-11T23:22:31.236162846Z length: 71, 2026-07-11T23:22:31.236165676Z severity: 'FATAL', 2026-07-11T23:22:31.236168517Z code: '28P01', 2026-07-11T23:22:31.236171206Z detail: undefined, 2026-07-11T23:22:31.236173797Z hint: undefined, 2026-07-11T23:22:31.236176447Z position: undefined, 2026-07-11T23:22:31.236179047Z internalPosition: undefined, 2026-07-11T23:22:31.236181687Z internalQuery: undefined, 2026-07-11T23:22:31.236184217Z where: undefined, 2026-07-11T23:22:31.236186717Z schema: undefined, 2026-07-11T23:22:31.236189307Z table: undefined, 2026-07-11T23:22:31.236191807Z column: undefined, 2026-07-11T23:22:31.236194367Z dataType: undefined, 2026-07-11T23:22:31.236196997Z constraint: undefined, 2026-07-11T23:22:31.236199567Z file: undefined, 2026-07-11T23:22:31.236202087Z line: undefined, 2026-07-11T23:22:31.236204717Z routine: undefined 2026-07-11T23:22:31.236207587Z }
 
 This is actually good news—you've made progress.
 
@@ -1030,7 +1024,7 @@ Leave the host and username visible, but replace only the password with `*******
 
 ---
 
-Q- After integrating the calendar successfully, the API is staying in a pending state and not returning any response. Is there something that I'm missing?
+### Q-  After integrating the calendar successfully, the API is staying in a pending state and not returning any response. Is there something that I'm missing?
 
 A request that stays in **Pending** (never returning a response) is a very different symptom from getting a 500 error.
 
@@ -1169,7 +1163,7 @@ Those two files are enough to pinpoint why the request never completes.
 
 [1]: https://expressjs.com/en/5x/guide/routing/?utm_source=chatgpt.com "Routing · Express.js"
 
-Q- I think the issue is in this router. Can you please verify?
+### Q-  I think the issue is in this router. Can you please verify?
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -1341,7 +1335,7 @@ I'm fairly confident the issue is in that function's pagination logic, and I can
 
 ---
 
-Q- Give me a test stripe card details
+### Q-  Give me a test stripe card details
 
 You can use Stripe's official test cards in **test mode**. They only work with your Stripe test API keys.
 
