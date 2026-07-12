@@ -13,7 +13,7 @@ export const syncRouter = Router();
 syncRouter.post("/run", async (_req: Request, res: Response) => {
   const summaries = await runFullSync([
     hubspotSource as any,
-    // googleCalendarSource as any,
+    googleCalendarSource as any,
     stripeSource as any,
   ]);
   res.json({ summaries });
