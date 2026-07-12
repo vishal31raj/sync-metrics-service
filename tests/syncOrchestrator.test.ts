@@ -1,11 +1,3 @@
-/**
- * Integration test -- requires a real Postgres database, see
- * metrics.consistency.test.ts header for setup. Uses hand-written fake
- * SourceAdapters so the test doesn't depend on live HubSpot/Stripe/Google
- * credentials -- it's testing the orchestrator's control flow, not the
- * real HTTP adapters (those are exercised by pointing REAL_* env vars at
- * sandbox accounts and running `npm run sync` manually / in CI nightly).
- */
 import { sequelize, SyncCursor, SyncRun, Transaction } from "../src/models";
 import { runSourceSync, runFullSync } from "../src/pipeline/syncOrchestrator";
 import { SourceAdapter, StaleCursorError, SourceUnavailableError, NormalizedRecord } from "../src/sources/types";
@@ -122,9 +114,6 @@ describe("sync orchestrator", () => {
     const source = fakeSource("fake_c");
 
     await runSourceSync(source);
-    // cursor advanced to "cursor-2" after first run; simulate the job
-    // re-running immediately with the same starting state by resetting the
-    // cursor back, mimicking "job re-ran before cursor commit was visible".
     await SyncCursor.upsert({ source: "fake_c", cursorValue: "cursor-1" });
     await runSourceSync(source);
 

@@ -3,21 +3,34 @@ dotenv.config();
 import { sequelize, Transaction, Contact, CalendarEvent } from "../src/models";
 import { mapStatus } from "../src/normalize/statusMap";
 
-/**
- * Seeds a small, deliberately messy dataset: multiple sources, mixed known
- * and unknown statuses, so `npm run seed` + the metrics endpoints give you
- * something real to poke at without needing live HubSpot/Stripe/Google
- * credentials. In real use, this data instead arrives via `npm run sync`
- * hitting the live sandbox/test-mode accounts.
- */
 async function main() {
   await sequelize.authenticate();
 
   const stripeCharges = [
-    { id: "ch_seed_1", amount: 12000, status: "succeeded", occurredAt: "2026-06-01" },
-    { id: "ch_seed_2", amount: 4500, status: "pending", occurredAt: "2026-06-02" },
-    { id: "ch_seed_3", amount: 9900, status: "failed", occurredAt: "2026-06-03" },
-    { id: "ch_seed_4", amount: 15000, status: "succeeded", occurredAt: "2026-06-04" },
+    {
+      id: "ch_seed_1",
+      amount: 12000,
+      status: "succeeded",
+      occurredAt: "2026-06-01",
+    },
+    {
+      id: "ch_seed_2",
+      amount: 4500,
+      status: "pending",
+      occurredAt: "2026-06-02",
+    },
+    {
+      id: "ch_seed_3",
+      amount: 9900,
+      status: "failed",
+      occurredAt: "2026-06-03",
+    },
+    {
+      id: "ch_seed_4",
+      amount: 15000,
+      status: "succeeded",
+      occurredAt: "2026-06-04",
+    },
   ];
   for (const c of stripeCharges) {
     await Transaction.upsert({
@@ -34,11 +47,24 @@ async function main() {
   }
 
   const invoicingRows = [
-    { id: "inv_seed_1", amount: 25000, status: "paid", occurredAt: "2026-06-01" },
-    { id: "inv_seed_2", amount: 8000, status: "open", occurredAt: "2026-06-05" },
-    // deliberately unrecognized status -- should land as 'unknown' and be
-    // excluded from revenue, proving the allow-list holds.
-    { id: "inv_seed_3", amount: 5000, status: "chargeback_pending", occurredAt: "2026-06-06" },
+    {
+      id: "inv_seed_1",
+      amount: 25000,
+      status: "paid",
+      occurredAt: "2026-06-01",
+    },
+    {
+      id: "inv_seed_2",
+      amount: 8000,
+      status: "open",
+      occurredAt: "2026-06-05",
+    },
+    {
+      id: "inv_seed_3",
+      amount: 5000,
+      status: "chargeback_pending",
+      occurredAt: "2026-06-06",
+    },
   ];
   for (const r of invoicingRows) {
     await Transaction.upsert({
@@ -77,13 +103,11 @@ async function main() {
     raw: { seed: true },
   });
 
-  // eslint-disable-next-line no-console
-  console.log("Seed complete: 7 transactions across 2 sources, 1 contact, 1 event.");
+  console.log("Seed complete!");
   await sequelize.close();
 }
 
 main().catch((err) => {
-  // eslint-disable-next-line no-console
   console.error(err);
   process.exit(1);
 });

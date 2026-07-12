@@ -16,9 +16,9 @@ const StripeChargeSchema = z.object({
   id: z.string(),
   amount: z.number(),
   currency: z.string(),
-  status: z.string(), // 'succeeded' | 'pending' | 'failed', plus refunded flag below
+  status: z.string(),
   refunded: z.boolean().optional(),
-  created: z.number(), // unix seconds
+  created: z.number(),
 });
 export type StripeCharge = z.infer<typeof StripeChargeSchema>;
 
@@ -36,15 +36,14 @@ async function stripeRequest(path: string) {
     throw new StaleCursorError("stripe", { status: 410 });
   }
   if (!res.ok) {
-    // Stripe doesn't literally 410 on a bad `starting_after` cursor -- it
-    // 400s with code=resource_missing. We treat that specific case as a
-    // stale cursor too (the pointer refers to an object that no longer
-    // exists in the paging window), everything else as a hard failure.
     const text = await res.text();
     if (res.status === 400 && text.includes("resource_missing")) {
       throw new StaleCursorError("stripe", { status: 400, body: text });
     }
-    throw new SourceUnavailableError("stripe", { status: res.status, body: text });
+    throw new SourceUnavailableError("stripe", {
+      status: res.status,
+      body: text,
+    });
   }
   return res.json();
 }
@@ -52,16 +51,15 @@ async function stripeRequest(path: string) {
 export const stripeSource: SourceAdapter<StripeCharge> = {
   name: "stripe",
 
-  async fetchIncremental(cursor: string | null): Promise<FetchResult<StripeCharge>> {
+  async fetchIncremental(
+    cursor: string | null,
+  ): Promise<FetchResult<StripeCharge>> {
     if (!cursor) throw new StaleCursorError("stripe", "no cursor on file");
 
-    // Cursor format: `${unixTimestamp}` (created >= cursor) OR a Stripe
-    // object id for cursor-based pagination -- we use created timestamps
-    // here since Stripe's list API supports `created[gte]`.
     let body: StripeListResponse;
     try {
       body = (await stripeRequest(
-        `/v1/charges?created[gte]=${encodeURIComponent(cursor)}&limit=100`
+        `/v1/charges?created[gte]=${encodeURIComponent(cursor)}&limit=100`,
       )) as StripeListResponse;
     } catch (err) {
       if (err instanceof StaleCursorError) throw err;
@@ -69,7 +67,10 @@ export const stripeSource: SourceAdapter<StripeCharge> = {
     }
 
     const valid = parseAndFilter(body.data);
-    const newest = valid.map((c) => c.created).sort((a, b) => a - b).pop();
+    const newest = valid
+      .map((c) => c.created)
+      .sort((a, b) => a - b)
+      .pop();
 
     return {
       records: valid,
@@ -78,33 +79,43 @@ export const stripeSource: SourceAdapter<StripeCharge> = {
     };
   },
 
-  async fetchFull(pageToken?: string | null): Promise<FetchResult<StripeCharge>> {
+  async fetchFull(
+    pageToken?: string | null,
+  ): Promise<FetchResult<StripeCharge>> {
     const qs = new URLSearchParams({ limit: "100" });
     if (pageToken) qs.set("starting_after", pageToken);
 
     let body: StripeListResponse;
     try {
-      body = (await stripeRequest(`/v1/charges?${qs.toString()}`)) as StripeListResponse;
+      body = (await stripeRequest(
+        `/v1/charges?${qs.toString()}`,
+      )) as StripeListResponse;
     } catch (err) {
       if (err instanceof StaleCursorError) throw err;
       throw new SourceUnavailableError("stripe", err);
     }
 
     const valid = parseAndFilter(body.data);
-    const lastId = valid.length ? valid[valid.length - 1].id : pageToken ?? null;
-    const newestCreated = valid.map((c) => c.created).sort((a, b) => a - b).pop();
+    const lastId = valid.length
+      ? valid[valid.length - 1].id
+      : (pageToken ?? null);
+    const newestCreated = valid
+      .map((c) => c.created)
+      .sort((a, b) => a - b)
+      .pop();
 
     return {
       records: valid,
-      nextCursor: body.has_more ? lastId : newestCreated ? String(newestCreated) : null,
+      nextCursor: body.has_more
+        ? lastId
+        : newestCreated
+          ? String(newestCreated)
+          : null,
       hasMore: body.has_more,
     };
   },
 
   normalize(record: StripeCharge): NormalizedRecord {
-    // "refunded: true" overrides "status: succeeded" -- Stripe keeps both
-    // flags set simultaneously on a refunded charge, so the raw status
-    // string alone ('succeeded') would misclassify it as collected revenue.
     const rawStatus = record.refunded ? "refunded" : record.status;
     return {
       entityType: "transaction",

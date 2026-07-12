@@ -28,13 +28,12 @@ describe("status allow-list", () => {
   });
 
   it("does the same for a source that has never been seen before", () => {
-    expect(mapStatus("some_brand_new_payment_provider", "paid")).toBe("unknown");
+    expect(mapStatus("some_brand_new_payment_provider", "paid")).toBe(
+      "unknown",
+    );
   });
 
   it("COLLECTED_STATUSES is a strict allow-list, not derived from exclusion", () => {
-    // Guards against someone "simplifying" this later into
-    // `all_statuses.filter(s => !EXCLUDED.includes(s))`, which would let
-    // any new status default to true.
     expect(COLLECTED_STATUSES).toEqual(["collected"]);
   });
 });

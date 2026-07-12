@@ -1,7 +1,3 @@
-/**
- * Integration test -- requires a real Postgres database, see
- * metrics.consistency.test.ts header for setup.
- */
 import { sequelize, Transaction, ProcessedWebhookEvent } from "../src/models";
 import { upsertNormalizedRecord } from "../src/pipeline/upsert";
 import { stripeSource } from "../src/sources/stripeSource";
@@ -16,7 +12,11 @@ afterAll(async () => {
 
 beforeEach(async () => {
   await Transaction.destroy({ where: {}, truncate: true, cascade: true });
-  await ProcessedWebhookEvent.destroy({ where: {}, truncate: true, cascade: true });
+  await ProcessedWebhookEvent.destroy({
+    where: {},
+    truncate: true,
+    cascade: true,
+  });
 });
 
 const sampleCharge = {
@@ -32,9 +32,11 @@ describe("idempotent writes", () => {
     const normalized = stripeSource.normalize(sampleCharge as any);
 
     await upsertNormalizedRecord(normalized);
-    await upsertNormalizedRecord(normalized); // simulate sync job re-run back-to-back
+    await upsertNormalizedRecord(normalized);
 
-    const rows = await Transaction.findAll({ where: { source: "stripe", sourceId: "ch_idem_test_1" } });
+    const rows = await Transaction.findAll({
+      where: { source: "stripe", sourceId: "ch_idem_test_1" },
+    });
     expect(rows).toHaveLength(1);
   });
 
@@ -42,14 +44,14 @@ describe("idempotent writes", () => {
     const first = stripeSource.normalize(sampleCharge as any);
     await upsertNormalizedRecord(first);
 
-    const updatedCharge = { ...sampleCharge, amount: 7500 }; // amount changed upstream
+    const updatedCharge = { ...sampleCharge, amount: 7500 };
     const second = stripeSource.normalize(updatedCharge as any);
     await upsertNormalizedRecord(second);
 
-    const rows = await Transaction.findAll({ where: { source: "stripe", sourceId: "ch_idem_test_1" } });
+    const rows = await Transaction.findAll({
+      where: { source: "stripe", sourceId: "ch_idem_test_1" },
+    });
     expect(rows).toHaveLength(1);
-    // amount_cents is BIGINT; pg returns bigint columns as strings by
-    // default, so coerce before comparing.
     expect(Number(rows[0].amountCents)).toBe(7500);
   });
 
@@ -65,6 +67,6 @@ describe("idempotent writes", () => {
     });
 
     expect(firstCreated).toBe(true);
-    expect(secondCreated).toBe(false); // second "delivery" recognized as duplicate
+    expect(secondCreated).toBe(false);
   });
 });

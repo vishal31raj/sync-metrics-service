@@ -1,8 +1,6 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../config/database";
 
-// ---------- SyncCursor: one row per source, tracks where incremental fetch left off ----------
-
 export interface SyncCursorAttributes {
   source: string;
   cursorValue: string | null;
@@ -30,8 +28,6 @@ SyncCursor.init(
     createdAt: false,
   },
 );
-
-// ---------- SyncRun: audit log, one row per sync attempt per source ----------
 
 export type SyncRunStatus = "success" | "partial" | "failed";
 export type SyncRunMode = "incremental" | "full_backfill";
@@ -114,8 +110,6 @@ SyncRun.init(
   },
   { sequelize, tableName: "sync_runs", underscored: true, timestamps: false },
 );
-
-// ---------- ProcessedWebhookEvent: de-dupes webhook deliveries ----------
 
 export interface ProcessedWebhookEventAttributes {
   source: string;

@@ -29,10 +29,6 @@ const GCalEventSchema = z.object({
 export type GCalEvent = z.infer<typeof GCalEventSchema>;
 
 async function getAccessToken(): Promise<string> {
-  // In production this exchanges the service-account JSON for a bearer
-  // token via google-auth-library. Kept as a narrow seam here so the
-  // adapter's control flow (the part under test) doesn't depend on network
-  // access to Google's OAuth endpoint.
   const mod = await import("./googleAuth");
   return mod.getGoogleAccessToken();
 }
@@ -44,16 +40,10 @@ async function gcalRequest(path: string) {
   });
 
   if (res.status === 410) {
-    // Google's documented behavior: an expired syncToken returns 410 Gone
-    // and requires a full re-list (with showDeleted=true) to resync.
     throw new StaleCursorError("google_calendar", { status: 410 });
   }
   if (!res.ok) {
     const body = await res.text();
-
-    console.error("Google Calendar API Error");
-    console.error("Status:", res.status);
-    console.error(body);
 
     throw new SourceUnavailableError("google_calendar", {
       status: res.status,
@@ -117,9 +107,7 @@ export const googleCalendarSource: SourceAdapter<GCalEvent> = {
     const valid = parseAndFilter(body.items);
     return {
       records: valid,
-      // A fresh syncToken only arrives once you've paged through everything;
-      // orchestrator keeps calling fetchFull with pageToken until hasMore is
-      // false, then persists nextSyncToken as the new incremental cursor.
+
       nextCursor: body.nextSyncToken ?? pageToken ?? null,
       hasMore: !!body.nextPageToken,
     };
